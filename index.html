@@ -32,6 +32,10 @@
             justify-content: center;
             cursor: pointer;
         }
+        /* Ensure PDF background remains dark even during capture */
+        #pdf-report-container {
+            background-color: #050508 !important;
+        }
         @media print {
             .no-print { display: none !important; }
         }
@@ -90,127 +94,126 @@
             );
         };
 
-        // --- DATA ---
         const QUESTIONS = [
             { id: 1, axis: 'EI', dir: 1, text: "在社交聚會中，我傾向於主動認識新朋友。" },
-            { id: 2, axis: 'EI', dir: -1, text: "獨處一陣子比與人聊天更能讓我恢復精神。" },
-            { id: 3, axis: 'EI', dir: 1, text: "我喜歡在快節奏、有背景音的環境中工作。" },
-            { id: 4, axis: 'EI', dir: -1, text: "在團隊討論中，我習慣先思考清楚再發言。" },
-            { id: 5, axis: 'EI', dir: 1, text: "我不介意成為焦點，甚至享受被關注的時刻。" },
-            { id: 6, axis: 'EI', dir: -1, text: "即使是愉快的聚會，結束後我也會感到疲累。" },
-            { id: 7, axis: 'EI', dir: 1, text: "我傾向於透過與人討論來釐清自己的想法。" },
-            { id: 8, axis: 'EI', dir: -1, text: "我偏好深度的一對一交談，而非多人社交。" },
-            { id: 9, axis: 'EI', dir: 1, text: "我是一個先行動再思考的人，喜歡在實踐中摸索。" },
-            { id: 10, axis: 'EI', dir: -1, text: "在社交場合中，我通常是觀察者多於參與者。" },
-            { id: 11, axis: 'EI', dir: 1, text: "我很容易開啟新話題，即使是對剛認識的人。" },
-            { id: 12, axis: 'EI', dir: -1, text: "比起打電話，我更傾向使用文字訊息溝通。" },
-            { id: 13, axis: 'EI', dir: 1, text: "安靜與寂寞的環境會讓我感到焦慮或缺乏動力。" },
-            { id: 14, axis: 'EI', dir: -1, text: "我喜歡幕後工作，讓成果替我說話。" },
-            { id: 15, axis: 'EI', dir: 1, text: "我喜歡隨興參加活動，不太擔心行程是否被填滿。" },
-            { id: 16, axis: 'EI', dir: -1, text: "我習慣在腦海中自我對話來理解世界。" },
-            { id: 17, axis: 'EI', dir: 1, text: "週末沒有任何社交活動會讓我感到失落。" },
-            { id: 18, axis: 'SN', dir: 1, text: "我更看重實用的經驗，而非未經證實的理論。" },
-            { id: 19, axis: 'SN', dir: -1, text: "我常被事物的「可能性」吸引，而不僅是現狀。" },
-            { id: 20, axis: 'SN', dir: 1, text: "描述事情時，我喜歡引用具體細節、時間與數字。" },
-            { id: 21, axis: 'SN', dir: -1, text: "我腦海中常出現跳躍式的、非線性的點子。" },
-            { id: 22, axis: 'SN', dir: 1, text: "學習新技能時，我喜歡先看到標準示範流程。" },
-            { id: 23, axis: 'SN', dir: -1, text: "我對於探討抽象的意義或隱喻感到興奮。" },
-            { id: 24, axis: 'SN', dir: 1, text: "我被認為是一個能腳踏實地處理事務的現實主義者。" },
-            { id: 25, axis: 'SN', dir: -1, text: "重複執行已經掌握的任務會讓我感到無聊。" },
-            { id: 26, axis: 'SN', dir: 1, text: "我傾向於相信眼見為憑的事實。" },
-            { id: 27, axis: 'SN', dir: -1, text: "我常想像未來不同的情節，思考「如果...會怎樣」。" },
-            { id: 28, axis: 'SN', dir: 1, text: "明確的說明書與指引讓我感到踏實。" },
-            { id: 29, axis: 'SN', dir: -1, text: "我常被說成是一個愛做白日夢或想法天馬行空的人。" },
-            { id: 30, axis: 'SN', dir: 1, text: "我擅長處理精細的事務，能耐心地檢查細微錯誤。" },
-            { id: 31, axis: 'SN', dir: -1, text: "我更在意大方向（Big Picture），細節留給他人。" },
-            { id: 32, axis: 'SN', dir: 1, text: "過去的數據是預測未來最可靠的工具。" },
-            { id: 33, axis: 'SN', dir: -1, text: "我喜歡發明新方法來解決問題，即使舊方法依然有效。" },
-            { id: 34, axis: 'SN', dir: 1, text: "我更喜歡從事可以產生具體、可視成果的工作。" },
-            { id: 35, axis: 'TF', dir: 1, text: "決策時，我傾向排除個人情緒，只看邏輯對錯。" },
-            { id: 36, axis: 'TF', dir: -1, text: "我非常在意決策對他人造成的衝擊。" },
-            { id: 37, axis: 'TF', dir: 1, text: "工作場合中，專業表現比維護交情更重要。" },
-            { id: 38, axis: 'TF', dir: -1, text: "我能輕易感受到他人未說出口的情緒。" },
-            { id: 39, axis: 'TF', dir: 1, text: "在爭論中，事實的呈現比照顧對方感受更優先。" },
-            { id: 40, axis: 'TF', dir: -1, text: "我追求團隊的和諧，即使需要犧牲一點效率。" },
-            { id: 41, axis: 'TF', dir: 1, text: "我被認為是一個理智且高冷的人。" },
-            { id: 42, axis: 'TF', dir: -1, text: "我的決策經常基於我的核心價值觀。" },
-            { id: 43, axis: 'TF', dir: 1, text: "規則對每個人都應一視同仁。" },
-            { id: 44, axis: 'TF', dir: -1, text: "規則應是彈性的，視個人特殊情況而定。" },
-            { id: 45, axis: 'TF', dir: 1, text: "我喜歡拆解事物結構，分析其運作邏輯。" },
-            { id: 46, axis: 'TF', dir: -1, text: "我很容易被感人的故事或電影深深打動。" },
-            { id: 47, axis: 'TF', dir: 1, text: "實質「解決問題」是提供幫助的最佳方式。" },
-            { id: 48, axis: 'TF', dir: -1, text: "給予「情緒支持」是提供幫助的最佳方式。" },
+            { id: 2, axis: 'AO', dir: 1, text: "在緊急情況下，我能保持冷靜。" },
+            { id: 3, axis: 'EI', dir: -1, text: "在團隊討論中，我習慣先思考清楚再發言。" },
+            { id: 4, axis: 'HC', dir: 1, text: "我天生喜歡照顧別人，即使要犧牲自己時間。" },
+            { id: 5, axis: 'SN', dir: -1, text: "我常被說成是一個愛做白日夢或想法天馬行空的人。" },
+            { id: 6, axis: 'JP', dir: -1, text: "規則過多會限制人的創造力與適應力。" },
+            { id: 7, axis: 'TF', dir: 1, text: "實質「解決問題」是提供幫助的最佳方式。" },
+            { id: 8, axis: 'AO', dir: 1, text: "我不容易受他人情緒影響，心理狀態穩定。" },
+            { id: 9, axis: 'TF', dir: -1, text: "我很容易被感人的故事或電影深深打動。" },
+            { id: 10, axis: 'JP', dir: 1, text: "我重視紀律，並認為「守時」是基本美德。" },
+            { id: 11, axis: 'EI', dir: 1, text: "我喜歡隨興參加活動，不太擔心行程是否被填滿。" },
+            { id: 12, axis: 'AO', dir: 1, text: "即使面對批評，我也能堅持自己的判斷。" },
+            { id: 13, axis: 'EI', dir: -1, text: "在社交場合中，我通常是觀察者多於參與者。" },
+            { id: 14, axis: 'HC', dir: 1, text: "我常主動詢問他人的感受並提供情緒支持。" },
+            { id: 15, axis: 'SN', dir: 1, text: "描述事情時，我喜歡引用具體細節、時間與數字。" },
+            { id: 16, axis: 'TF', dir: -1, text: "我非常在意決策對他人造成的衝擊。" },
+            { id: 17, axis: 'JP', dir: -1, text: "我的桌面或房間可能有點亂，但我知道東西在哪。" },
+            { id: 18, axis: 'HC', dir: -1, text: "我不喜歡求助，認為獨立解決是成熟表現。" },
+            { id: 19, axis: 'TF', dir: -1, text: "我追求團隊的和諧，即使需要犧牲一點效率。" },
+            { id: 20, axis: 'SN', dir: 1, text: "我更看重實用的經驗，而非未經證實的理論。" },
+            { id: 21, axis: 'AO', dir: -1, text: "我經常覺得自己做得不夠好。" },
+            { id: 22, axis: 'JP', dir: -1, text: "我在壓力下工作得更好。" },
+            { id: 23, axis: 'HC', dir: -1, text: "衝突時，我優先分析權責關係。" },
+            { id: 24, axis: 'EI', dir: 1, text: "安靜與寂寞的環境會讓我感到焦慮或缺乏動力。" },
+            { id: 25, axis: 'SN', dir: 1, text: "過去的數據是預測未來最可靠的工具。" },
+            { id: 26, axis: 'JP', dir: 1, text: "我對計畫的變動感到焦慮，偏好確定感。" },
+            { id: 27, axis: 'HC', dir: 1, text: "我傾向於寬恕，認為每個人都有其難處。" },
+            { id: 28, axis: 'TF', dir: 1, text: "法律與原則的執行不應帶有個人感性色彩。" },
+            { id: 29, axis: 'SN', dir: -1, text: "我常想像未來不同的情節，思考「如果...會怎樣」。" },
+            { id: 30, axis: 'AO', dir: 1, text: "我對未來充滿信心，很少為了未發生的事失眠。" },
+            { id: 31, axis: 'JP', dir: -1, text: "我常同時開始很多項目，但不一定都會完成。" },
+            { id: 32, axis: 'AO', dir: 1, text: "我不常發脾氣，情緒波動幅度很小。" },
+            { id: 33, axis: 'HC', dir: -1, text: "我不受情緒勒索影響，能維持中立立場。" },
+            { id: 34, axis: 'EI', dir: -1, text: "我習慣在腦海中自我對話來理解世界。" },
+            { id: 35, axis: 'SN', dir: -1, text: "我常被事物的「可能性」吸引，而不僅是現狀。" },
+            { id: 36, axis: 'TF', dir: -1, text: "我說話委婉，避免讓別人感到受挫。" },
+            { id: 37, axis: 'JP', dir: -1, text: "我更喜歡隨機應變，不喜歡被清單束縛。" },
+            { id: 38, axis: 'HC', dir: -1, text: "我認為人與人應保持專業距離。" },
+            { id: 39, axis: 'EI', dir: 1, text: "我是一個先行動再思考的人，喜歡在實踐中摸索。" },
+            { id: 40, axis: 'TF', dir: 1, text: "規則對每個人都應一視同仁。" },
+            { id: 41, axis: 'JP', dir: -1, text: "突如其來的靈感對我來說比計畫更重要。" },
+            { id: 42, axis: 'AO', dir: 1, text: "我對目前的自我認同感很高。" },
+            { id: 43, axis: 'HC', dir: 1, text: "我願意分享自己的脆弱面來建立深層連結。" },
+            { id: 44, axis: 'EI', dir: -1, text: "獨處一陣子比與人聊天更能讓我恢復精神。" },
+            { id: 45, axis: 'SN', dir: 1, text: "我更喜歡從事可以產生具體、可視成果的工作。" },
+            { id: 46, axis: 'TF', dir: 1, text: "我被認為是一個理智且高冷的人。" },
+            { id: 47, axis: 'AO', dir: -1, text: "我心思細膩，但有時會過度憂慮細節。" },
+            { id: 48, axis: 'HC', dir: -1, text: "社交中我傾向保持客觀理性。" },
             { id: 49, axis: 'TF', dir: 1, text: "我習慣指出錯誤，以便對方能從中改進。" },
-            { id: 50, axis: 'TF', dir: -1, text: "我說話委婉，避免讓別人感到受挫。" },
-            { id: 51, axis: 'TF', dir: 1, text: "法律與原則的執行不應帶有個人感性色彩。" },
-            { id: 52, axis: 'JP', dir: 1, text: "我喜歡在開始一天前，先排好待辦事項順序。" },
-            { id: 53, axis: 'JP', dir: -1, text: "我更喜歡隨機應變，不喜歡被清單束縛。" },
-            { id: 54, axis: 'JP', dir: 1, text: "我對計畫的變動感到焦慮，偏好確定感。" },
-            { id: 55, axis: 'JP', dir: -1, text: "我在壓力下工作得更好。" },
-            { id: 56, axis: 'JP', dir: 1, text: "完成目標帶給我的快感大於過程的樂趣。" },
-            { id: 57, axis: 'JP', dir: -1, text: "我傾向於保留選擇空間，不急著做決定。" },
-            { id: 58, axis: 'JP', dir: 1, text: "我習慣提前規劃行程，確保一切在控制中。" },
-            { id: 59, axis: 'JP', dir: -1, text: "我常同時開始很多項目，但不一定都會完成。" },
-            { id: 60, axis: 'JP', dir: 1, text: "我重視紀律，並認為「守時」是基本美德。" },
-            { id: 61, axis: 'JP', dir: -1, text: "我的桌面或房間可能有點亂，但我知道東西在哪。" },
-            { id: 62, axis: 'JP', dir: 1, text: "我喜歡先苦後甘，事情做完了才能安心休息。" },
-            { id: 63, axis: 'JP', dir: -1, text: "如果工作太規律死板，我會很快失去興致。" },
-            { id: 64, axis: 'JP', dir: 1, text: "我習慣將大任務拆解成小步驟按步就班執行。" },
-            { id: 65, axis: 'JP', dir: -1, text: "突如其來的靈感對我來說比計畫更重要。" },
-            { id: 66, axis: 'JP', dir: 1, text: "我喜歡生活有明確的節奏感。" },
-            { id: 67, axis: 'JP', dir: -1, text: "規則過多會限制人的創造力與適應力。" },
-            { id: 68, axis: 'JP', dir: 1, text: "我做決定很快，因為我討厭懸而未決。" },
-            { id: 69, axis: 'AO', dir: 1, text: "即使面對批評，我也能堅持自己的判斷。" },
-            { id: 70, axis: 'AO', dir: -1, text: "我常會反覆回想過去說過的話，擔心是否得體。" },
-            { id: 71, axis: 'AO', dir: 1, text: "我對未來充滿信心，很少為了未發生的事失眠。" },
-            { id: 72, axis: 'AO', dir: -1, text: "我容易感受到壓力，並因此感到焦慮或緊張。" },
-            { id: 73, axis: 'AO', dir: 1, text: "我不容易受他人情緒影響，心理狀態穩定。" },
-            { id: 74, axis: 'AO', dir: -1, text: "我追求完美，一點小瑕疵就會讓我沮喪。" },
-            { id: 75, axis: 'AO', dir: 1, text: "遇到失敗時，我能迅速振作並視其為學習機會。" },
-            { id: 76, axis: 'AO', dir: -1, text: "我非常在意社會成就以及他人的正面評價。" },
-            { id: 77, axis: 'AO', dir: 1, text: "我對目前的自我認同感很高。" },
-            { id: 78, axis: 'AO', dir: -1, text: "生活發生不可預測的變動時，我會感到不安。" },
-            { id: 79, axis: 'AO', dir: 1, text: "在緊急情況下，我能保持冷靜。" },
-            { id: 80, axis: 'AO', dir: -1, text: "我經常覺得自己做得不夠好。" },
-            { id: 81, axis: 'AO', dir: 1, text: "我不常發脾氣，情緒波動幅度很小。" },
-            { id: 82, axis: 'AO', dir: -1, text: "做決策後，我常掛念著「未選之路」的優點。" },
-            { id: 83, axis: 'AO', dir: 1, text: "我能接受現狀，不糾結於無法改變的事。" },
-            { id: 84, axis: 'AO', dir: -1, text: "我心思細膩，但有時會過度憂慮細節。" },
-            { id: 85, axis: 'HC', dir: 1, text: "我天生喜歡照顧別人，即使要犧牲自己時間。" },
-            { id: 86, axis: 'HC', dir: -1, text: "我認為人與人應保持專業距離。" },
-            { id: 87, axis: 'HC', dir: 1, text: "看到別人成功，我會感到由衷喜悅並讚美。" },
-            { id: 88, axis: 'HC', dir: -1, text: "社交中我傾向保持客觀理性。" },
-            { id: 89, axis: 'HC', dir: 1, text: "我很容易相信別人的出發點是善良的。" },
-            { id: 90, axis: 'HC', dir: -1, text: "我對社交寒暄感到無趣。" },
-            { id: 91, axis: 'HC', dir: 1, text: "我願意分享自己的脆弱面來建立深層連結。" },
-            { id: 92, axis: 'HC', dir: -1, text: "我不喜歡求助，認為獨立解決是成熟表現。" },
-            { id: 93, axis: 'HC', dir: 1, text: "我對周遭人的情緒極度敏感。" },
-            { id: 94, axis: 'HC', dir: -1, text: "我不受情緒勒索影響，能維持中立立場。" },
-            { id: 95, axis: 'HC', dir: 1, text: "我傾向於寬恕，認為每個人都有其難處。" },
-            { id: 96, axis: 'HC', dir: -1, text: "我喜歡獨處，社交活動通常是有目的才參加。" },
-            { id: 97, axis: 'HC', dir: 1, text: "我是一個熱情且具有感染力的人。" },
-            { id: 98, axis: 'HC', dir: -1, text: "衝突時，我優先分析權責關係。" },
-            { id: 99, axis: 'HC', dir: 1, text: "我常主動詢問他人的感受並提供情緒支持。" },
-            { id: 100, axis: 'HC', dir: -1, text: "我不介意被視為冷淡，只要事情能高效完成。" }
+            { id: 50, axis: 'EI', dir: 1, text: "我喜歡在快節奏、有背景音的環境中工作。" },
+            { id: 51, axis: 'SN', dir: 1, text: "我傾向於相信眼見為憑的事實。" },
+            { id: 52, axis: 'JP', dir: -1, text: "我傾向於保留選擇空間，不急著做決定。" },
+            { id: 53, axis: 'AO', dir: -1, text: "我追求完美，一點小瑕疵就會讓我沮喪。" },
+            { id: 54, axis: 'HC', dir: -1, text: "我喜歡獨處，社交活動通常是有目的才參加。" },
+            { id: 55, axis: 'TF', dir: 1, text: "決策時，我傾向排除個人情緒，只看邏輯對錯。" },
+            { id: 56, axis: 'JP', dir: 1, text: "我喜歡生活有明確的節奏感。" },
+            { id: 57, axis: 'EI', dir: 1, text: "我不介意成為焦點，甚至享受被關注的時刻。" },
+            { id: 58, axis: 'AO', dir: -1, text: "我常會反覆回顧自己的錯誤，難以釋懷。" },
+            { id: 59, axis: 'SN', dir: -1, text: "我喜歡發明新方法來解決問題，即使舊方法依然有效。" },
+            { id: 60, axis: 'TF', dir: -1, text: "我能輕易感受到他人未說出口的情緒。" },
+            { id: 61, axis: 'JP', dir: 1, text: "我做決定很快，因為我討厭懸而未決。" },
+            { id: 62, axis: 'HC', dir: -1, text: "我不介意被視為冷淡，只要事情能高效完成。" },
+            { id: 63, axis: 'EI', dir: 1, text: "我傾向於透過與人討論來釐清自己的想法。" },
+            { id: 64, axis: 'SN', dir: 1, text: "學習新技能時，我喜歡先看到標準示範流程。" },
+            { id: 65, axis: 'JP', dir: 1, text: "完成目標帶給我的快感大於過程的樂樂趣。" },
+            { id: 66, axis: 'AO', dir: -1, text: "生活發生不可預測的變動時，我會感到不安。" },
+            { id: 67, axis: 'EI', dir: -1, text: "我喜歡幕後工作，讓成果替我說話。" },
+            { id: 68, axis: 'TF', dir: 1, text: "我喜歡拆解事物結構，分析其運作邏輯。" },
+            { id: 69, axis: 'HC', dir: 1, text: "我很容易相信別人的出發點是善良的。" },
+            { id: 70, axis: 'EI', dir: -1, text: "我偏好深度的一對一交談，而非多人社交。" },
+            { id: 71, axis: 'SN', dir: 1, text: "我擅長處理精細的事務，能耐心地檢查細微錯誤。" },
+            { id: 72, axis: 'TF', dir: 1, text: "在爭論中，事實的呈現比照顧對方感受更優先。" },
+            { id: 73, axis: 'JP', dir: 1, text: "我習慣將大任務拆解成小步驟按步就班執行。" },
+            { id: 74, axis: 'AO', dir: -1, text: "我容易感受到壓力，並因此感到焦慮或緊張。" },
+            { id: 75, axis: 'EI', dir: -1, text: "即使是愉快的聚會，結束後我也會感到疲累。" },
+            { id: 76, axis: 'HC', dir: 1, text: "我是一個熱情且具有感染力的人。" },
+            { id: 77, axis: 'TF', dir: -1, text: "我的決策經常基於我的核心價值觀。" },
+            { id: 78, axis: 'SN', dir: -1, text: "我腦海中常出現跳躍式的、非線性的點子。" },
+            { id: 79, axis: 'JP', dir: 1, text: "我習慣提前規劃行程，確保一切在控制中。" },
+            { id: 80, axis: 'AO', dir: 1, text: "遇到失敗時，我能迅速振作並視其為學習機會。" },
+            { id: 81, axis: 'HC', dir: 1, text: "我對周遭人的情緒極度敏感。" },
+            { id: 82, axis: 'EI', dir: -1, text: "比起打電話，我更傾向使用文字訊息溝通。" },
+            { id: 83, axis: 'SN', dir: -1, text: "我對於探討抽象的意義或隱喻感到興奮。" },
+            { id: 84, axis: 'TF', dir: 1, text: "工作場合中，專業表現比維護交情更重要。" },
+            { id: 85, axis: 'JP', dir: 1, text: "我喜歡在開始一天前，先排好待辦事項順序。" },
+            { id: 86, axis: 'AO', dir: 1, text: "我能接受現狀，不糾結於無法改變的事。" },
+            { id: 87, axis: 'EI', dir: 1, text: "週末沒有任何社交活動會讓我感到失落。" },
+            { id: 88, axis: 'HC', dir: -1, text: "我對社交寒暄感到無趣。" },
+            { id: 89, axis: 'EI', dir: 1, text: "我很容易開啟新話題，即使是對剛認識的人。" },
+            { id: 90, axis: 'SN', dir: 1, text: "明確的說明書與指引讓我感到踏實。" },
+            { id: 91, axis: 'TF', dir: -1, text: "給予「情緒支持」是提供幫助的最佳方式。" },
+            { id: 92, axis: 'JP', dir: -1, text: "如果工作太規律死板，我會很快失去興致。" },
+            { id: 93, axis: 'AO', dir: -1, text: "我非常在意社會成就以及他人的正面評價。" },
+            { id: 94, axis: 'HC', dir: 1, text: "我看到別人成功，會感到由衷喜悅並讚美。" },
+            { id: 95, axis: 'SN', dir: -1, text: "重複執行已經掌握的任務會讓我感到無聊。" },
+            { id: 96, axis: 'TF', dir: -1, text: "規則應是彈性的，視個人特殊情況而定。" },
+            { id: 97, axis: 'JP', dir: 1, text: "我喜歡先苦後甘，事情做完了才能安心休息。" },
+            { id: 98, axis: 'AO', dir: -1, text: "我常會反覆回顧自己的錯誤，難以釋懷。" },
+            { id: 99, axis: 'SN', dir: 1, text: "我被認為是一個能腳踏實地處理事務的現實主義者。" },
+            { id: 100, axis: 'SN', dir: -1, text: "我更在意大方向（Big Picture），細節留給他人。" }
         ];
 
         const PERSONALITY_MAP = {
             "INTJ": { title: "建築師", desc: "想像力豐富且具戰略性的思想家，擁有計畫一切的藍圖。你傾向於追求完美與獨立，對於效率低下的流程感到極度不耐。", strengths: ["理性的心智", "極高的工作效率", "獨立自主", "深遠的遠見"], weaknesses: ["過度挑剔", "情感疏離", "對社交慣例不屑一顧", "完美主義"], career: "系統架構師、資料科學家、戰略顧問、投資分析師。", partner: "需要智力上能匹敵的人. 最契合 64 型：[ENFP-A-H] (極速靈魂夥伴) 或 [ENTP-O-C] (智慧對手)." },
             "INTP": { title: "邏輯學家", desc: "具有創造力的發明家，對知識有著止不住的渴望。你活在充滿點子的世界裡，擅長發現事物之間隱藏的規律與聯繫。", strengths: ["原創性思維", "客觀冷靜", "開放的心態", "極強的分析力"], weaknesses: ["容易分心", "懷疑論者", "忽視情緒細節", "過度糾結邏輯"], career: "軟體開發者、哲學家、數學家、研究科學家。", partner: "欣賞智慧與獨立者. 最契合 64 型：[ENFJ-A-H] (啟發者) 或 [ENTJ-O-C] (目標驅動者)." },
-            "ENTJ": { title: "指揮官", desc: "大膽、富有想像力且意志強大的領導者。你是天生的組織者，具備卓越的長遠願景與強悍的執行力。", strengths: ["自信果決", "強大的驅動力", "戰略規劃能力", "高效能領袖"], weaknesses: ["固執己見", "缺乏耐心", "不耐煩他人的情感", "過度競爭"], career: "企業高管、創業家、管理顧問、律師。", partner: "有上進心且能並肩作戰者. 最契合 64 型：[INFP-O-H] (柔性定錨) 或 [INTP-A-C] (邏輯核心)." },
+            "ENTJ": { title: "指揮官", desc: "大膽、富有想像力且意志強大的領導者。你是天生的組織者，具備卓越的長遠願景與強悍的執行力。", strengths: ["自信果決", "強大的驅動力", "戰略規劃能力", "高效能領袖"], weaknesses: ["固執見解", "缺乏耐心", "不耐煩他人的情感", "過度競爭"], career: "企業高管、創業家、管理顧問、律師。", partner: "有上進心且能並肩作戰者. 最契合 64 型：[INFP-O-H] (柔性定錨) 或 [INTP-A-C] (邏輯核心)." },
             "ENTP": { title: "辯論家", desc: "聰明且好奇的思想家，無法抗拒智力上的挑戰。你享受拆解概念的過程，是一個典型的「惡魔代言人」。", strengths: ["博學多聞", "靈活適應", "出色的溝通者", "熱愛挑戰"], weaknesses: ["爭強好勝", "缺乏後續執行", "容易感到無聊", "不專心細節"], career: "專利律師、公關總監、連續創業者、系統分析師。", partner: "思維敏捷且有趣的人. 最契合 64 型：[INFJ-O-H] (心靈導師) 或 [INTJ-A-C] (架構專家)." },
-            "INFJ": { title: "提倡者", desc: "安靜而神秘，同時鼓舞人心且不知疲倦的理想主義者。你擁有一種深刻的使命感，致力於透過洞察人性來改善世界。", strengths: ["深刻的直覺", "堅定的原則", "富有同理心", "具啟發性"], weaknesses: ["對批評敏感", "容易精疲力竭", "理想主義色彩過重", "難以敞開心房"], career: "心理諮商師、作家、人資總監、非營利組織領袖。", partner: "真誠且願意深入交流者. 最契合 64 型：[ENFP-A-H] (溫暖陽光) 或 [ENTP-O-C] (智力擴展)." },
+            "INFJ": { title: "提倡者", desc: "安靜而神秘，同時鼓舞人心且不知疲倦的理想主義者。你擁有一種深刻的使命感，致力於透過洞察人性來改善世界。", strengths: ["深刻的直覺", "堅定的原則", "富有同理心", "具啟發性"], weaknesses: ["對批評敏感", "容易精評力竭", "理想主義色彩過重", "難以敞開心房"], career: "心理諮商師、作家、人資總監、非營利組織領袖。", partner: "真誠且願意深入交流者. 最契合 64 型：[ENFP-A-H] (溫暖陽光) 或 [ENTP-O-C] (智力擴展)." },
             "INFP": { title: "調解者", desc: "詩意、善良且無私的人，總是渴求幫助正義的事業。你極度看重內心的和諧與價值觀，能感知到他人最微小的情緒波動。", strengths: ["同理心極強", "忠於自我", "極具創造力", "思想開明"], weaknesses: ["容易情緒化", "實踐力較弱", "過度理想化", "對現實妥協困難"], career: "藝術家、設計師、文字工作者、心理治療師。", partner: "溫柔理解內心世界者. 最契合 64 型：[ENFJ-A-H] (支持者) 或 [ENTJ-O-C] (引領者)." },
             "ENFJ": { title: "主人公", desc: "富有魅力且鼓舞人心的領導者，有能力讓聽眾為之動容. 你具備強大的社交直覺，能精準帶動群體向共同目標前進。", strengths: ["天生領袖魅力", "極佳的包容力", "可靠且無私", "溝通大師"], weaknesses: ["過度理想化他人", "不擅長拒絕", "情緒易受他人左右", "過度擔憂社會期望"], career: "公關經理、企業教練、教育工作者、外交官。", partner: "穩定且接受關懷者. 最契合 64 型：[INFP-O-H] (靈魂伴侶) 或 [ISFP-A-H] (感性探險家)." },
             "ENFP": { title: "競選者", desc: "熱情、有創造力且自由自在的靈魂，總能找到理由微笑. 你充滿熱忱，是團體中的能量來源，不斷尋求生活中深層的含義。", strengths: ["極具感染力", "善於觀察他人", "創意無極限", "社交高手"], weaknesses: ["缺乏組織性", "容易過度思考", "三分鐘熱度", "對批評感到不安"], career: "行銷企劃、記者、創意總監、活動策劃。", partner: "提供生活定錨感者. 最契合 64 型：[INFJ-O-H] (深度理解) 或 [INTJ-A-C] (理性支柱)." },
             "ISTJ": { title: "物流師", desc: "務實且注重事實的人，可靠性不容置疑. 你是傳統與穩定的守護者，對於責任有著無與倫比的嚴謹與承諾。", strengths: ["誠實可靠", "極強的責任感", "冷靜穩重", "秩序維護者"], weaknesses: ["固執呆板", "缺乏情感表達", "過度批判變化", "墨守成規"], career: "會計師、法務人員、系統管理員、公務員。", partner: "負責且生活規慮者. 最契合 64 型：[ESFP-A-H] (生活調味) 或 [ISFJ-O-H] (細心守護)." },
             "ISFJ": { title: "守護者", desc: "非常專注且溫暖的守護者，時刻準備保護他們愛的人. 你默默付出的特質讓你成為家庭與組織中最強大的後盾。", strengths: ["極其細心", "忠誠體貼", "實幹精神", "溫暖的同理心"], weaknesses: ["不善表達需求", "容易過度負重", "抗拒新事物", "內在較脆弱"], career: "護理師、幼教老師、行政主管、社工人員。", partner: "懂得感恩其付出者. 最契合 64 型：[ESTP-A-C] (行動力強) 或 [ESFJ-O-H] (社交核心)." },
-            "ESTJ": { title: "總管", desc: "出色的管理人員，在管理事務或人方面無與倫比. 你重視秩序與清晰，擅長將混亂的現狀轉化為條理分明的執行步驟。", strengths: ["組織力卓越", "高效率執行者", "領導力強", "穩定的價值觀"], weaknesses: ["缺乏彈性", "過度注重威權", "不理解非理性情緒", "主觀意識強"], career: "專案經理、營運長、財務長、軍警人員。", partner: "踏實且尊重秩序者. 最契合 64 型：[ISFP-O-H] (柔軟補足) 或 [ISTP-A-C] (技術支持)." },
+            "ESTJ": { title: "總管", desc: "出色的管理人員，在管理事務或人方面無與倫比。你重視秩序與清晰，擅長將混亂的現狀轉化為條理分明的執行步驟。", strengths: ["組織力卓越", "高效率執行者", "領導力強", "穩定的價值觀"], weaknesses: ["缺乏彈性", "過度注重威權", "不理解非理性情緒", "主觀意識強"], career: "專案經理、營運長、財務長、軍警人員。", partner: "踏實且尊重秩序者. 最契合 64 型：[ISFP-O-H] (柔軟補足) 或 [ISTP-A-C] (技術支持)." },
             "ESFJ": { title: "執政官", desc: "極度關心他人、社交且受歡迎的人，總是熱衷於提供幫助. 你擅長創造和諧的社交環境，是團隊與朋友圈中的黏合劑。", strengths: ["社交天賦", "高度的責任感", "細膩的觀察力", "和諧守護者"], weaknesses: ["在意他人評價", "害怕孤單", "抗拒結構性改變", "容易自我犧牲"], career: "業務主管、醫護人員、活動主辦人、客服經理。", partner: "重視家庭與圈子者. 最契合 64 型：[ISFJ-O-H] (穩定後盾) 或 [ESTJ-A-C] (紀律領袖)." },
             "ISTP": { title: "鑒賞家", desc: "大膽且實際的實驗家，擅長使用各類工具. 你冷靜地觀察周遭，並以最具效率的方式解決眼前的實體難題。", strengths: ["危機應變力強", "高度好奇心", "實踐力強", "不受情緒左右"], weaknesses: ["難以捉摸", "容易感到無聊", "忽視個人情感", "對承諾感到焦慮"], career: "軟硬體工程師、數據分析師、機師、技術維修員。", partner: "獨立不黏人者. 最契合 64 型：[ESTJ-A-C] (組織領袖) 或 [ESFJ-O-H] (情感調節)." },
             "ISFP": { title: "探險家", desc: "靈活且有魅力的藝術家，時刻準備探索與體驗新鮮事物. 你活在當下，追求美感與個人的真實表達，討厭被框架束縛。", strengths: ["獨特的審美", "熱愛探索", "溫柔包容", "靈活度高"], weaknesses: ["抗拒長期計畫", "容易過度競爭", "低自尊傾向", "抗壓力較弱"], career: "室內設計師、攝影師、造型師、廚師。", partner: "懂欣賞獨特美感者. 最契合 64 型：[ENFJ-A-H] (溫暖引導) 或 [ESFJ-O-H] (社交中心)." },
-            "ESTP": { title: "企業家", desc: "聰明、精力充沛且觀察力敏閱的人，真心享受冒險生活. 你動作迅速，擅長在動態的環境中捕捉機會，活在行動的前線。", strengths: ["決斷力強", "務實精神", "幽默有趣", "社交領袖"], weaknesses: ["忽視長期後果", "沒耐心", "不愛守規範", "情感層次較淺"], career: "銷售總監、急救人員、創業家、運動員。", partner: "充滿活力且不拘小節者. 最契合 64 型：[ISFJ-O-H] (溫柔守護) 或 [ISTJ-A-C] (秩序中心)." },
-            "ESFP": { title: "表演者", desc: "自發、精力充沛且熱情的表演者. 你具備極強的娛樂精神與感染力，能瞬間點亮周圍的氛圍，享受與他人共享喜悅。", strengths: ["樂觀開朗", "極佳的社交力", "活在當下", "感官敏銳"], weaknesses: ["缺乏深度思考", "逃避問題", "追求瞬間刺激", "計畫性差"], career: "演員、旅遊公關、品牌大使、活動主持。", partner: "熱情外向且願相隨者. 最契合 64 型：[ISTJ-A-C] (冷靜支支柱) 或 [ISFJ-O-H] (細心伴侶)." }
+            "ESTP": { title: "企業家", desc: "聰明、精力充沛且觀察力敏銳的人，真心享受冒險生活. 你動作迅速，擅長在動態的環境中捕捉機會，活在行動的前線。", strengths: ["決斷力強", "務實精神", "幽默有趣", "社交領袖"], weaknesses: ["忽視長期後果", "沒耐心", "不愛守規範", "情感層次較淺"], career: "銷售總監、急救人員、創業家、運動員。", partner: "充滿活力且不拘小節者. 最契合 64 型：[ISFJ-O-H] (溫柔守護) 或 [ISTJ-A-C] (秩序中心)." },
+            "ESFP": { title: "表演者", desc: "自發、精力充沛且熱情的表演者. 你具備極強的娛樂精神與感染力，能瞬間點亮周圍的氛圍，享受與他人共享喜悅。", strengths: ["樂觀開朗", "極佳的社交力", "活在當下", "感官敏敏銳"], weaknesses: ["缺乏深度思考", "逃避問題", "追求瞬間刺激", "計畫性差"], career: "演員、旅遊公關、品牌大使、活動主持。", partner: "熱情外向且願相隨者. 最契合 64 型：[ISTJ-A-C] (冷靜支柱) 或 [ISFJ-O-H] (細心伴侶)." }
         };
 
         const INDICATOR_DETAILS = {
@@ -234,14 +237,33 @@
 
             const handleAnswer = (qid, val) => { setAnswers(prev => ({ ...prev, [qid]: val })); };
             const scrollToTop = () => { window.scrollTo({ top: 0, behavior: 'smooth' }); };
-            const goToNext = () => { if (currentPage < totalPages - 1) { setCurrentPage(c => c + 1); setTimeout(scrollToTop, 50); } else { setStatus('result'); setTimeout(scrollToTop, 50); } };
-            const goToPrev = () => { setCurrentPage(c => c - 1); setTimeout(scrollToTop, 50); };
+            
+            const goToNext = () => { 
+                if (currentPage < totalPages - 1) { 
+                    setCurrentPage(c => c + 1); 
+                    setTimeout(scrollToTop, 50); 
+                } else { 
+                    setStatus('result'); 
+                    setTimeout(scrollToTop, 50); 
+                } 
+            };
+            
+            const goToPrev = () => { 
+                setCurrentPage(c => c - 1); 
+                setTimeout(scrollToTop, 50); 
+            };
 
             const calculateResults = useMemo(() => {
                 if (status !== 'result') return null;
                 const scores = { EI: 0, SN: 0, TF: 0, JP: 0, AO: 0, HC: 0 };
                 const counts = { EI: 0, SN: 0, TF: 0, JP: 0, AO: 0, HC: 0 };
-                QUESTIONS.forEach(q => { const ans = answers[q.id]; if (ans) { scores[q.axis] += (ans - 3) * q.dir; counts[q.axis] += 1; } });
+                QUESTIONS.forEach(q => { 
+                    const ans = answers[q.id]; 
+                    if (ans) { 
+                        scores[q.axis] += (ans - 3) * q.dir; 
+                        counts[q.axis] += 1; 
+                    } 
+                });
                 const getCode = (axis, left, right) => scores[axis] >= 0 ? right : left;
                 const base = getCode('EI','I','E') + getCode('SN','N','S') + getCode('TF','F','T') + getCode('JP','P','J');
                 return {
@@ -271,19 +293,47 @@
                 setIsExporting(true);
                 try {
                     const element = document.getElementById('pdf-report-container');
-                    const canvas = await window.html2canvas(element, { backgroundColor: '#050508', scale: 2, useCORS: true, logging: false, windowHeight: element.scrollHeight, scrollY: -window.scrollY });
-                    const imgData = canvas.toDataURL('image/jpeg', 0.95);
-                    const pdf = new window.jspdf.jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-                    const pdfWidth = pdf.internal.pageSize.getWidth();
-                    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-                    let heightLeft = pdfHeight;
+                    
+                    // Create high-res canvas of the entire result container
+                    const canvas = await window.html2canvas(element, { 
+                        backgroundColor: '#050508', 
+                        scale: 2, 
+                        useCORS: true, 
+                        logging: false,
+                        windowWidth: 1200 // Fix width for consistent scaling
+                    });
+
+                    const imgWidth = 210; // A4 width in mm
+                    const pageHeight = 297; // A4 height in mm
+                    const canvasWidth = canvas.width;
+                    const canvasHeight = canvas.height;
+                    
+                    // Calculated height of the image on the PDF page based on aspect ratio
+                    const imgHeight = (canvasHeight * imgWidth) / canvasWidth;
+                    
+                    const pdf = new window.jspdf.jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
+                    
                     let position = 0;
-                    const pageHeight = pdf.internal.pageSize.getHeight();
-                    pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, pdfHeight);
+                    let heightLeft = imgHeight;
+
+                    // Adding first page
+                    pdf.addImage(canvas.toDataURL('image/jpeg', 0.95), 'JPEG', 0, position, imgWidth, imgHeight);
                     heightLeft -= pageHeight;
-                    while (heightLeft >= 0) { position = heightLeft - pdfHeight; pdf.addPage(); pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, pdfHeight); heightLeft -= pageHeight; }
+
+                    // If content overflows one page, add subsequent pages by shifting the image offset
+                    while (heightLeft > 0) {
+                        position = heightLeft - imgHeight;
+                        pdf.addPage();
+                        pdf.addImage(canvas.toDataURL('image/jpeg', 0.95), 'JPEG', 0, position, imgWidth, imgHeight);
+                        heightLeft -= pageHeight;
+                    }
+
                     pdf.save(`64型性格報告_${calculateResults.fullCode}.pdf`);
-                } catch (error) { console.error("PDF Error:", error); } finally { setIsExporting(false); }
+                } catch (error) { 
+                    console.error("PDF Export Error:", error); 
+                } finally { 
+                    setIsExporting(false); 
+                }
             };
 
             return (
@@ -349,15 +399,17 @@
                     {status === 'result' && (
                         <div className="w-full max-w-4xl animate-fade-in text-center">
                             <div id="pdf-report-container" className="p-8 md:p-14 bg-[#050508] rounded-[3rem] border border-white/10 shadow-2xl relative overflow-hidden text-white">
-                                <p className="text-blue-400 font-mono tracking-widest text-sm mb-4">64型人格個人分析報告</p>
-                                <h2 className="text-6xl md:text-8xl font-black mb-4 tracking-tighter">{calculateResults.fullCode}</h2>
-                                <h3 className="text-3xl md:text-4xl font-bold text-white/90 mb-12">
-                                    {PERSONALITY_MAP[calculateResults.baseCode]?.title}
-                                    <span className="mx-4 opacity-20">|</span>
-                                    <span className="text-lg font-medium opacity-60">
-                                        {calculateResults.ao==='A'?'果斷型':'深思型'} · {calculateResults.hc==='H'?'溫暖型':'高冷型'}
-                                    </span>
-                                </h3>
+                                <div className="mb-10">
+                                    <p className="text-blue-400 font-mono tracking-widest text-sm mb-4">64型人格個人分析報告</p>
+                                    <h2 className="text-6xl md:text-8xl font-black mb-4 tracking-tighter">{calculateResults.fullCode}</h2>
+                                    <h3 className="text-3xl md:text-4xl font-bold text-white/90 mb-12">
+                                        {PERSONALITY_MAP[calculateResults.baseCode]?.title}
+                                        <span className="mx-4 opacity-20">|</span>
+                                        <span className="text-lg font-medium opacity-60">
+                                            {calculateResults.ao==='A'?'果斷型':'深思型'} · {calculateResults.hc==='H'?'溫暖型':'高冷型'}
+                                        </span>
+                                    </h3>
+                                </div>
 
                                 <div className="mb-10 p-8 bg-white/5 rounded-3xl border border-white/5 text-left">
                                     <div className="flex items-center gap-3 mb-4 text-blue-400"><Icon name="user" className="w-6 h-6" /><h4 className="text-xl font-bold">核心性格解讀</h4></div>
@@ -414,7 +466,7 @@
                                 </div>
                                 
                                 <div className="text-center mt-12 text-xs text-gray-600 font-mono">
-                                    報告日期：{new Date().toLocaleDateString()}
+                                    報告日期：{new Date().toLocaleDateString()} · 64型人格分析系統
                                 </div>
                             </div>
 
